@@ -4,7 +4,7 @@ import { SocketInstance } from "../../types/socket";
 
 const test = () => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
-	const [chat, setChat] = useState<string[]>([]);
+	const [chatId, setChatId] = useState<string|undefined>();
 	const [input, setInput] = useState<string>("");
 
 	useEffect(() => {
@@ -13,22 +13,26 @@ const test = () => {
 		const messages = document.getElementById("messages");
 
 		socket.on("connect", () => {
-			console.log('connected')
-			
-			socket.on("Hello", (arg) => {
-				console.log("Received: ", arg)
-			})
+			const msg = document.createElement("li");
+			msg.textContent = `Your ID is ${socket.id}, pairing you with someone...`;
+			messages?.appendChild(msg);
 
-			socket.on("chat", (arg) => {
-				const item = document.createElement('li');
-				item.textContent = arg;
-				messages?.appendChild(item);
-			})
-		})
+			socket.on("pair", (matchedId) => {
+				const msg = document.createElement("li");
+				msg.textContent = `You are matched with ${matchedId}`;
+				messages?.appendChild(msg);
+				setChatId(matchedId);
+			});
+			socket.on("chat", (payload) => {
+				const msg = document.createElement("li");
+				msg.textContent = payload;
+				messages?.appendChild(msg);
+			});
+		});
 	}, []);
 
 	const sendMsg = () => {
-		if (socket && socket.connected) {
+		if (socket && socket.connected && chatId) {
 			socket.emit("chat", input);
 			setInput("");
 		}
