@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function Home() {
-    const username = localStorage.getItem("username")
+
+    useEffect(() => {
+        const username = localStorage.getItem("username");
+    }, []);
+
     return (
         <div className="mx-auto md:h-screen flex flex-row pt:mt-0">
             <div className="flex flex-col justify-end items-center w-1/5 h-full bg-light-blue">
