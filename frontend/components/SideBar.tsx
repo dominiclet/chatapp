@@ -1,6 +1,13 @@
 import {BsThreeDotsVertical} from 'react-icons/bs'
 
-const SideBar = (props: JSX.Element) => {
+const leaveChat = () => {
+    const parent: any = document.getElementById("messages")
+    while (parent.firstChild) {
+        parent.firstChild.remove()
+    }
+}
+
+const SideBar = (props: any) => {
     return (
         <div className="flex flex-col items-center h-full w-1/6">
             <div className="flex flex-row bg-light-blue h-min w-full mb-3 rounded-lg">
@@ -11,9 +18,12 @@ const SideBar = (props: JSX.Element) => {
             </div>                
             <div className="flex justify-center items-end bg-light-blue h-full w-full rounded-lg">
                 <div className="">
-                    <button className="mb-10 text-black bg-light-red 
-                    hover:bg-red-400 focus:ring-4 focus:ring-transparent 
-                    font-medium rounded-lg text-base px-5 py-3 w-full sm:w-auto text-center">Leave Chat</button>
+                    <button 
+                        className="mb-10 text-black bg-light-red 
+                        hover:bg-red-400 focus:ring-4 focus:ring-transparent 
+                        font-medium rounded-lg text-base px-5 py-3 w-full sm:w-auto text-center"
+                        onClick={leaveChat}
+                    >Leave Chat</button>
                 </div>
             </div>
         </div>

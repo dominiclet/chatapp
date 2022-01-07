@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { SocketInstance } from "../types/socket";
-import {BsThreeDotsVertical} from 'react-icons/bs'
-import Badge from 'react-bootstrap/Badge'
+import {BsThreeDotsVertical} from 'react-icons/bs';
+import TextBubble from "./TextBubble";
 
 const Chat = () => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
 	const [chatId, setChatId] = useState<string|undefined>();
-	const [input, setInput] = useState<string>("");
+	const [input, setInput] = useState<string>(""); 
+    const d = new Date();
 
 	useEffect(() => {
 		const socket = io("http://localhost:5000");
@@ -43,18 +44,25 @@ const Chat = () => {
     return (
         <div className="flex flex-col items-center h-full w-5/6">
             <div className="h-full w-full">
-                <h1 className="flex justify-center p-5">Messages go here</h1>
-                <div id="messages" className="self-center w-5/6 h-5 py-10">
-                    
+                <div className="flex flex-col justify-end self-center w-full h-full p-10">
+                    <div className="flex justify-center p-3">
+                        <button disabled={true} className="rounded-lg bg-date-button text-white text-sm px-7 py-0.5">
+                            {d.getDate()}/{d.getMonth()+1}/{d.getFullYear()}
+                        </button>                        
+                    </div>
+                    <div id="messages">
+                        <TextBubble self={true}/>
+                        <TextBubble self={false}/>
+                    </div>
                 </div>
             </div>
             <div className="h-min w-full">
-                <div className="flex">
+                <div className="flex px-10">
                     <button className="flex justify-center items-center w-10">
                         <BsThreeDotsVertical/>
                     </button>
                     <form 
-                        className="flex flex-row w-full p-2 my-7 mr-4 border border-gray/70 rounded-lg bottom-4 
+                        className="flex flex-row w-full my-7 mr-4 border border-gray/70 rounded-lg bottom-4 
                         outline-transparent"
                         onSubmit={sendMsg}
                         >
@@ -77,10 +85,8 @@ const Chat = () => {
                             />                         
                         </div>        
                     </form>
-
                 </div>
             </div>
-
         </div>
     )
 }

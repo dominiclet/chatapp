@@ -10,7 +10,9 @@ module.exports = {
         'gray' : '#D0D9DF',
         'button-blue' : '#738BE0',
         'light-red' : '#F7B6B4',
-        'send-button': '#6588DE'
+        'send-button': '#6588DE',
+        'date-button': '#6588DE',
+        'orange': '#F3BA4A'
       }
     },
   },
