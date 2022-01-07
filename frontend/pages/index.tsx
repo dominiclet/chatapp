@@ -1,23 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import SideBar from '../components/SideBar'
+import Chat from '../components/Chat'
 
 export default function Home() {
 
+    const [username, setUsername] = useState("")
     useEffect(() => {
         const username = localStorage.getItem("username");
+        setUsername(username)
     }, []);
 
     return (
-        <div className="mx-auto md:h-screen flex flex-row pt:mt-0">
-            <div className="flex flex-col justify-end items-center w-1/5 h-full bg-light-blue">
-                <div>
-                    <div>
-                        <button className="mb-10 text-black bg-light-red hover:bg-red-400 focus:ring-4 focus:ring-transparent font-medium rounded-lg text-base px-5 py-3 w-full sm:w-auto text-center">Leave Chat</button>
-                    </div>
-                </div>                
-            </div>
-
-            <div className="w-3/5 h-full">
-            </div>
+        <div className="mx-auto h-screen flex flex-row pt:mt-0">
+            <SideBar username={username}/>
+            <Chat/>
         </div>
     )
 }
