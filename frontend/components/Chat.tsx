@@ -4,7 +4,11 @@ import { message, SocketInstance } from "../types/socket";
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import TextBubble from "./TextBubble";
 
-const Chat = () => {
+interface Props {
+    username: string;
+}
+
+const Chat = (props: Props) => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
 	const [chatId, setChatId] = useState<string|undefined>();
 	const [input, setInput] = useState<string>(""); 
@@ -37,10 +41,10 @@ const Chat = () => {
 	const sendMsg = () => {
 		if (socket && socket.connected && chatId) {
             const message: message = {
-                name: "Name",
+                name: props.username,
                 content: input,
             }
-			socket.emit("chat", input);
+			socket.emit("chat", message);
 			setInput("");
 		}
 	}
