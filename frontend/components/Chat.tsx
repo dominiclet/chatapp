@@ -12,6 +12,7 @@ const Chat = (props: Props) => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
 	const [chatId, setChatId] = useState<string|undefined>();
 	const [input, setInput] = useState<string>(""); 
+    const [msgs, setMsgs] = useState<string[]>([]);
     const d = new Date();
 
 	useEffect(() => {
@@ -30,16 +31,21 @@ const Chat = (props: Props) => {
 				messages?.appendChild(msg);
 				setChatId(matchedId);
 			});
+
 			socket.on("chat", (payload) => {
-				const msg = document.createElement("li");
-				msg.textContent = `${payload.name}: ${payload.content}`;
-				messages?.appendChild(msg);
+                setMsgs((currMsgs) => {
+                    return [...currMsgs, payload.content];
+                });
+                const elem = document.getElementById("messages");
+                (elem as HTMLElement).scrollTop = (elem as HTMLElement).scrollHeight;
 			});
 		});
 	}, []);
 
+    console.log(msgs);
+
 	const sendMsg = () => {
-		if (socket && socket.connected && chatId) {
+		if (socket && socket.connected && chatId && input != "") {
             const message: message = {
                 name: props.username,
                 content: input,
@@ -50,19 +56,18 @@ const Chat = (props: Props) => {
 	}
 
     return (
-        <div className="flex flex-col items-center w-5/6 h-full">
-            <div className="w-full h-full">
-                <div className="flex flex-col self-center justify-end w-full h-full p-10">
-                    <div className="flex justify-center p-3">
-                        <button disabled={true} className="rounded-lg bg-date-button text-white text-sm px-7 py-0.5">
-                            {d.getDate()}/{d.getMonth()+1}/{d.getFullYear()}
-                        </button>                        
-                    </div>
-                    <div id="messages">
-                        <TextBubble textContent={"hello"} self={true}/>
-                        <TextBubble textContent={"hi"} self={false}/>
-                    </div>
+        <div className="flex flex-col items-center w-5/6 h-screen">
+            <div className="flex flex-col self-center w-full h-full overflow-y-scroll" id="messages">
+                <div className="flex justify-center p-3">
+                    <button disabled={true} className="rounded-lg bg-date-button text-white text-sm px-7 py-0.5">
+                        {d.getDate()}/{d.getMonth()+1}/{d.getFullYear()}
+                    </button>                        
                 </div>
+                {msgs.map((msg) => {
+                    return <TextBubble textContent={msg} />
+                })}
+                <TextBubble textContent={"hello"} self={true}/>
+                <TextBubble textContent={"hi"} self={false}/>
             </div>
             <div className="w-full h-min">
                 <div className="flex px-10">
