@@ -21,8 +21,13 @@ const Chat = (props: Props) => {
 		const messages = document.getElementById("messages");
 
 		socket.on("connect", () => {
+            if (localStorage.getItem("username") == null) {
+                console.log("Username not set yet! Redirecting...");
+                return;
+            }
+
             // Send a pair request
-            socket.emit("pair", props.username);
+            socket.emit("pair", localStorage.getItem("username"));
 
 			const msg = document.createElement("span");
             msg.style.color = "grey";
@@ -32,7 +37,6 @@ const Chat = (props: Props) => {
 			messages?.appendChild(msg);
 
 			socket.on("pair", (matchedId) => {
-                console.log(matchedId)
 				const msg = document.createElement("span");
                 msg.style.color = "grey";
                 msg.style.fontSize = "15px";
@@ -42,6 +46,15 @@ const Chat = (props: Props) => {
 				setChatId(matchedId);
 			});
 
+            socket.on("announce", (message) => {
+				const msg = document.createElement("span");
+                msg.style.color = "grey";
+                msg.style.fontSize = "15px";
+                msg.style.textAlign = "center";
+                msg.textContent = message;
+                messages?.appendChild(msg);
+            })
+
 			socket.on("chat", (payload) => {
                 setMsgs((currMsgs) => {
                     return [...currMsgs, payload];
@@ -50,9 +63,11 @@ const Chat = (props: Props) => {
                 (elem as HTMLElement).scrollTop = (elem as HTMLElement).scrollHeight;
 			});
 		});
-	}, []);
 
-    console.log(msgs);
+        return () => {
+            socket.close();
+        }
+	}, []);
 
 	const sendMsg = () => {
 		if (socket && socket.connected && chatId && input != "") {

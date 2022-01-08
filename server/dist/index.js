@@ -32,8 +32,14 @@ io.on("connection", (socket) => {
     });
     socket.on("disconnect", (reason) => {
         console.log(`${socket.id} has disconnected (Reason: ${reason})`);
-        if (pairingQueue.length > 0 && pairingQueue[0].id == socket.id)
-            pairingQueue.pop();
+        if (pairingQueue.length > 0) {
+            for (let i = 0; i < pairingQueue.length; i++) {
+                if (pairingQueue[i].id == socket.id) {
+                    pairingQueue.splice(i, 1);
+                    return;
+                }
+            }
+        }
     });
 });
 // Pairing loop
@@ -71,11 +77,13 @@ setInterval(() => {
     });
     // Handle disconnect events
     match1.on("disconnect", () => {
-        io.to(match2Id).emit("chat", `${match1Id} has disconnected, finding you a new chat partner...`);
+        io.to(match2Id).emit("announce", `${match1Id} has disconnected, finding you a new chat buddy...`);
+        match2.removeAllListeners("chat");
         pairingQueue.push(pairReq2);
     });
     match2.on("disconnect", () => {
-        io.to(match1Id).emit("chat", `${match2Id} has disconnected, finding you a new chat partner...`);
+        io.to(match1Id).emit("announce", `${match2Id} has disconnected, finding you a new chat buddy...`);
+        match1.removeAllListeners("chat");
         pairingQueue.push(pairReq1);
     });
 }, 3000);

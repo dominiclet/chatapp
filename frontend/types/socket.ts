@@ -24,5 +24,5 @@ export interface SocketData {
 
 export interface SocketInstance {
 	connected: boolean;
-	emit: (arg1: string, arg2: message|string) => void;
+	emit: (arg1: string, arg2: Message|string) => void;
 }
