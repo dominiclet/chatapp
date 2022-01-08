@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-import { SocketInstance } from "../../types/socket";
+import { io } from "socket.io-client";
+import { message, SocketInstance } from "../../types/socket";
 
 const test = () => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
@@ -25,7 +25,7 @@ const test = () => {
 			});
 			socket.on("chat", (payload) => {
 				const msg = document.createElement("li");
-				msg.textContent = payload;
+				msg.textContent = `${payload.name}: ${payload.content}`;
 				messages?.appendChild(msg);
 			});
 		});
@@ -33,7 +33,11 @@ const test = () => {
 
 	const sendMsg = () => {
 		if (socket && socket.connected && chatId) {
-			socket.emit("chat", input);
+			const message: message = {
+				name: "Name",
+				content: input
+			}
+			socket.emit("chat", message);
 			setInput("");
 		}
 	}
@@ -55,6 +59,6 @@ const test = () => {
 				/>
 			</div>
 		</div>
-	)
+	);
 }
 export default test 

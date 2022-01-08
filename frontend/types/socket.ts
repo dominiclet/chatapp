@@ -4,6 +4,11 @@ export interface ServerToClientEvents {
   withAck: (d: string, callback: (e: number) => void) => void;
 }
 
+export interface message {
+  name: string;
+  content: string;
+}
+
 export interface ClientToServerEvents {
   hello: () => void;
 }
@@ -19,5 +24,5 @@ export interface SocketData {
 
 export interface SocketInstance {
 	connected: boolean;
-	emit: (arg1: string, arg2: string) => void;
+	emit: (arg1: string, arg2: message|string) => void;
 }

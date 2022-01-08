@@ -47,7 +47,7 @@ setInterval(() => {
 	} else if (!match2 && match1) {
 		pairingQueue.push(match1Id);
 		return;
-	} else if (!match1 && match2) {
+	} else if (!match1 && !match2) {
 		return;
 	}
 
