@@ -55,8 +55,8 @@ const Chat = () => {
                         </button>                        
                     </div>
                     <div id="messages">
-                        <TextBubble self={true}/>
-                        <TextBubble self={false}/>
+                        <TextBubble textContent={"hello"} self={true}/>
+                        <TextBubble textContent={"hi"} self={false}/>
                     </div>
                 </div>
             </div>

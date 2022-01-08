@@ -1,21 +1,29 @@
 import React from 'react'
 
 const TextBubble = (props:any) => {
-    // Props: true for self, false for other person
+    // Props: textContent; self (true for self, false for other person)
+    const d = new Date();
+
     return (
-        <div>
+        <div className="px-7 m-2">
             {props.self ? (
                 <div className="flex items-end justify-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-                        <div><span className="px-4 py-2 rounded-lg inline-block bg-orange text-white ">yes, I have a mac. I never had issues with root permission as well, but this helped me to solve the problem</span></div>
+                    <div className="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-1 items-end">
+                            <span className="px-4 py-2 rounded-lg inline-block bg-orange text-white ">
+                                {props.textContent}
+                                <p className="flex justify-end text-[10px]">{d.getHours()}:{d.getMinutes()}</p>
+                            </span>
                     </div>
                 </div>                
             ) : (
                 <div className="flex items-end">
-                    <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                        <div><span className="px-4 py-2 rounded-lg inline-block bg-light-blue text-gray-600">I get the same error on Arch Linux (also with sudo)</span></div>
-                        <div><span className="px-4 py-2 rounded-lg inline-block bg-light-blue text-gray-600">I also have this issue, Here is what I was doing until now: #1076</span></div>
-                        <div><span className="px-4 py-2 rounded-lg inline-block bg-light-blue text-gray-600">even i am facing</span></div>
+                    <div className="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-2 items-start">
+                        <div>
+                            <span className="px-4 py-2 rounded-lg inline-block bg-light-blue text-gray-600">
+                                {props.textContent}
+                                <p className="flex justify-end text-[10px]">{d.getHours()}:{d.getMinutes()}</p>
+                            </span>
+                        </div>
                     </div>
                 </div>              
             )}
