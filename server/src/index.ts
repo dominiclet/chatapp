@@ -2,12 +2,13 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from "socket.io";
 import cors from "cors";
+import { PairRequest } from './types/socket';
 
 const app = express();
 app.use(cors())
 const port = 5000;
 const httpServer = createServer(app);
-const pairingQueue: string[] = [];
+const pairingQueue: PairRequest[] = [];
 
 const io = new Server(httpServer, {
 	cors: {
@@ -24,36 +25,43 @@ app.get('/', (_, res) => {
 io.on("connection", (socket) => {
 	console.log(`New connection by ${socket.id}, adding to pairing queue...`)
 
-	pairingQueue.push(socket.id);
+	socket.on("pair", (payload) => {
+		pairingQueue.push({
+			id: socket.id, 
+			name: payload,
+		})
+	})
 
 	socket.on("disconnect", (reason) => {
 		console.log(`${socket.id} has disconnected (Reason: ${reason})`);
-		if (pairingQueue[0] == socket.id) pairingQueue.pop();
+		if (pairingQueue.length > 0 && pairingQueue[0].id == socket.id) pairingQueue.pop();
 	})
 })
 
 // Pairing loop
 setInterval(() => {
 	if (pairingQueue.length <= 1) return;
-	const match1Id = pairingQueue.shift();
-	const match2Id = pairingQueue.shift();
+	const pairReq1 = pairingQueue.shift();
+	const pairReq2 = pairingQueue.shift();
+	const match1Id = pairReq1.id;
+	const match2Id = pairReq2.id;
 
 	// Check if sockets are still connected
 	const match1 = io.sockets.sockets.get(match1Id);
 	const match2 = io.sockets.sockets.get(match2Id);
 	if (!match1 && match2) {
-		pairingQueue.push(match2Id);
+		pairingQueue.push(pairReq2);
 		return;
 	} else if (!match2 && match1) {
-		pairingQueue.push(match1Id);
+		pairingQueue.push(pairReq1);
 		return;
 	} else if (!match1 && !match2) {
 		return;
 	}
 
 	// Emit pair messages
-	match1.emit("pair", match2Id);
-	match2.emit("pair", match1Id);
+	match1.emit("pair", pairReq2.name);
+	match2.emit("pair", pairReq1.name);
 	console.log(`Paired ${match1Id} with ${match2Id}`)
 
 	// Listen to each other's chats
@@ -67,11 +75,11 @@ setInterval(() => {
 	// Handle disconnect events
 	match1.on("disconnect", () => {
 		io.to(match2Id).emit("chat", `${match1Id} has disconnected, finding you a new chat partner...`);
-		pairingQueue.push(match2Id);
+		pairingQueue.push(pairReq2);
 	})
 	match2.on("disconnect", () => {
 		io.to(match1Id).emit("chat", `${match2Id} has disconnected, finding you a new chat partner...`);
-		pairingQueue.push(match1Id);
+		pairingQueue.push(pairReq1);
 	})
 }, 3000)
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { message, SocketInstance } from "../../types/socket";
+import { Message, SocketInstance } from "../../types/socket";
 
 const test = () => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
@@ -33,7 +33,7 @@ const test = () => {
 
 	const sendMsg = () => {
 		if (socket && socket.connected && chatId) {
-			const message: message = {
+			const message: Message = {
 				name: "Name",
 				content: input
 			}

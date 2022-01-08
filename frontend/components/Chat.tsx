@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { message, SocketInstance } from "../types/socket";
+import { Message, SocketInstance } from "../types/socket";
 import {BsThreeDotsVertical} from 'react-icons/bs';
 import TextBubble from "./TextBubble";
 
@@ -12,7 +12,7 @@ const Chat = (props: Props) => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
 	const [chatId, setChatId] = useState<string|undefined>();
 	const [input, setInput] = useState<string>(""); 
-    const [msgs, setMsgs] = useState<string[]>([]);
+    const [msgs, setMsgs] = useState<Message[]>([]);
     const d = new Date();
 
 	useEffect(() => {
@@ -21,12 +21,22 @@ const Chat = (props: Props) => {
 		const messages = document.getElementById("messages");
 
 		socket.on("connect", () => {
-			const msg = document.createElement("li");
-			msg.textContent = `Your ID is ${socket.id}, pairing you with someone...`;
+            // Send a pair request
+            socket.emit("pair", props.username);
+
+			const msg = document.createElement("span");
+            msg.style.color = "grey";
+            msg.style.fontSize = "15px";
+            msg.style.textAlign = "center";
+			msg.textContent = `Finding you a chat buddy...`;
 			messages?.appendChild(msg);
 
 			socket.on("pair", (matchedId) => {
-				const msg = document.createElement("li");
+                console.log(matchedId)
+				const msg = document.createElement("span");
+                msg.style.color = "grey";
+                msg.style.fontSize = "15px";
+                msg.style.textAlign = "center";
 				msg.textContent = `You are matched with ${matchedId}`;
 				messages?.appendChild(msg);
 				setChatId(matchedId);
@@ -34,7 +44,7 @@ const Chat = (props: Props) => {
 
 			socket.on("chat", (payload) => {
                 setMsgs((currMsgs) => {
-                    return [...currMsgs, payload.content];
+                    return [...currMsgs, payload];
                 });
                 const elem = document.getElementById("messages");
                 (elem as HTMLElement).scrollTop = (elem as HTMLElement).scrollHeight;
@@ -46,7 +56,7 @@ const Chat = (props: Props) => {
 
 	const sendMsg = () => {
 		if (socket && socket.connected && chatId && input != "") {
-            const message: message = {
+            const message: Message = {
                 name: props.username,
                 content: input,
             }
@@ -64,10 +74,8 @@ const Chat = (props: Props) => {
                     </button>                        
                 </div>
                 {msgs.map((msg) => {
-                    return <TextBubble textContent={msg} />
+                    return (props.username === msg.name ? <TextBubble textContent={msg.content} self={true} /> : <TextBubble textContent={msg.content} self={false} />)
                 })}
-                <TextBubble textContent={"hello"} self={true}/>
-                <TextBubble textContent={"hi"} self={false}/>
             </div>
             <div className="w-full h-min">
                 <div className="flex px-10">

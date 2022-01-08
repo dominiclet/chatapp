@@ -4,7 +4,7 @@ export interface ServerToClientEvents {
   withAck: (d: string, callback: (e: number) => void) => void;
 }
 
-export interface message {
+export interface Message {
   name: string;
   content: string;
 }
