@@ -16,7 +16,7 @@ const Chat = (props: Props) => {
     const d = new Date();
 
 	useEffect(() => {
-		const socket = io("http://localhost:5000");
+		const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL as string);
 		setSocket(socket);
 		const messages = document.getElementById("messages");
 
