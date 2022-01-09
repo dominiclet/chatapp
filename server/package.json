@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "tsc & node .",
+    "start": "PORT=$PORT && tsc & node .",
     "dev": "tsc -w & nodemon ."
   },
   "author": "",
