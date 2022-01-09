@@ -3,9 +3,11 @@ import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
 import cors from "cors";
 import { PairRequest } from './types/socket';
+import dotenv from "dotenv";
 
 const app = express();
 app.use(cors())
+dotenv.config();
 const port = process.env.PORT || 5000;
 const httpServer = createServer(app);
 const pairingQueue: PairRequest[] = [];
