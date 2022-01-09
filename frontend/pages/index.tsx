@@ -16,9 +16,9 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="flex flex-row h-screen mx-auto pt:mt-0">
+        <div className="flex flex-row h-screen mx-auto pt:mt-0 bg-background">
             <SideBar username={username}/>
-            <Chat username={username} />
+            <Chat username={username}/>
         </div>
     )
 }
