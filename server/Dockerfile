@@ -4,5 +4,4 @@ WORKDIR /app
 COPY . .
 RUN npm install
 
-CMD gunicorn --bind :$PORT wsgi
-CMD ["gunicorn --bind :$PORT wsgi", "&&", "npm", "start"]
+CMD ["PORT=$PORT", "npm", "start"]
