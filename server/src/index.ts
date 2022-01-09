@@ -6,7 +6,7 @@ import { PairRequest } from './types/socket';
 
 const app = express();
 app.use(cors())
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const httpServer = createServer(app);
 const pairingQueue: PairRequest[] = [];
 
