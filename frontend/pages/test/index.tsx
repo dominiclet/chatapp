@@ -35,7 +35,8 @@ const Test = () => {
 		if (socket && socket.connected && chatId) {
 			const message: Message = {
 				name: "Name",
-				content: input
+				content: input,
+				time: Date().toString()
 			}
 			socket.emit("chat", message);
 			setInput("");
