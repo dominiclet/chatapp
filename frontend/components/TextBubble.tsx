@@ -1,6 +1,9 @@
-import React from 'react'
+interface Props {
+    self: boolean,
+    textContent: String,
+}
 
-const TextBubble = (props:any) => {
+const TextBubble = (props:Props) => {
     // Props: textContent; self (true for self, false for other person)
     const d = new Date();
 

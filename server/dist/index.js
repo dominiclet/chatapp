@@ -80,12 +80,12 @@ setInterval(() => {
     });
     // Handle disconnect events
     match1.on("disconnect", () => {
-        io.to(match2Id).emit("announce", `${match1Id} has disconnected, finding you a new chat buddy...`);
+        io.to(match2Id).emit("announce", `${pairReq1.name} has disconnected, finding you a new chat buddy...`);
         match2.removeAllListeners("chat");
         pairingQueue.push(pairReq2);
     });
     match2.on("disconnect", () => {
-        io.to(match1Id).emit("announce", `${match2Id} has disconnected, finding you a new chat buddy...`);
+        io.to(match1Id).emit("announce", `${pairReq2.name} has disconnected, finding you a new chat buddy...`);
         match1.removeAllListeners("chat");
         pairingQueue.push(pairReq1);
     });
