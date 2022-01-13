@@ -7,6 +7,7 @@ export interface ServerToClientEvents {
 export interface Message {
   name: string;
   content: string;
+  time: String;
 }
 
 export interface ClientToServerEvents {

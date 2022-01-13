@@ -14,6 +14,11 @@ const Chat = (props: Props) => {
 	const [input, setInput] = useState<string>(""); 
     const [msgs, setMsgs] = useState<Message[]>([]);
     const d = new Date();
+    const getTime = (d:Date) : String => {
+        var mins = (d.getMinutes() < 10) ? "0"+d.getMinutes().toString() : d.getMinutes().toString();
+        var hours = (d.getHours() < 10) ? "0"+d.getHours().toString() : d.getHours().toString();
+        return hours + ":" + mins
+    }
 
 	useEffect(() => {
 		const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL as string);
@@ -74,6 +79,7 @@ const Chat = (props: Props) => {
             const message: Message = {
                 name: props.username,
                 content: input,
+                time: getTime(d),
             }
 			socket.emit("chat", message);
 			setInput("");
@@ -89,7 +95,7 @@ const Chat = (props: Props) => {
                     </button>                        
                 </div>
                 {msgs.map((msg) => {
-                    return (props.username === msg.name ? <TextBubble textContent={msg.content} self={true} /> : <TextBubble textContent={msg.content} self={false} />)
+                    return (props.username === msg.name ? <TextBubble textContent={msg.content} self={true} time={msg.time}/> : <TextBubble textContent={msg.content} self={false} time={msg.time} />)
                 })}
             </div>
             <div className="w-full h-min">
