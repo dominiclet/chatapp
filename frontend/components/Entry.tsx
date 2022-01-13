@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, FormEventHandler} from 'react'
 import {useRouter} from 'next/router'
 
 const Entry = () => {
@@ -9,7 +9,7 @@ const Entry = () => {
     
     const router = useRouter()
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         if (localStorage.getItem("username")) {
             router.push('/')
         } 
@@ -17,8 +17,8 @@ const Entry = () => {
     }
 
     return (
-        <div className="mx-auto h-screen flex flex-col">
-            <div className="w-full h-2/5 flex justify-center items-center">
+        <div className="flex flex-col h-screen mx-auto">
+            <div className="flex items-center justify-center w-full h-2/5">
                 <h1 className="text-[50px] text-center">Welcome to App</h1>
             </div>
             <div className="p-20">
@@ -34,8 +34,7 @@ const Entry = () => {
                     
                     <div className="flex justify-center">
                         <input type="submit" value="Enter"
-                        className="outline hover:outline-blue bg-button-blue focus:ring-4 text-white text-center w-1/5 
-                        px-5 py-3 mt-15 rounded-lg font-medium"
+                        className="w-1/5 px-5 py-3 font-medium text-center text-white rounded-lg outline hover:outline-blue bg-button-blue focus:ring-4 mt-15"
                         />
                     </div>
                     

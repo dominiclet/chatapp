@@ -3,16 +3,18 @@ import { createServer } from 'http';
 import { Server, Socket } from "socket.io";
 import cors from "cors";
 import { PairRequest } from './types/socket';
+import dotenv from "dotenv";
 
 const app = express();
 app.use(cors())
-const port = 5000;
+dotenv.config();
+const port = process.env.PORT || 5000;
 const httpServer = createServer(app);
 const pairingQueue: PairRequest[] = [];
 
 const io = new Server(httpServer, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: process.env.FRONTEND_URL,
 		methods: ["GET", "POST"],
 		allowedHeaders: ["*"],
 	}

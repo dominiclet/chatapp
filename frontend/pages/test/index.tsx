@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Message, SocketInstance } from "../../types/socket";
 
-const test = () => {
+const Test = () => {
 	const [socket, setSocket] = useState<SocketInstance|undefined>();
 	const [chatId, setChatId] = useState<string|undefined>();
 	const [input, setInput] = useState<string>("");
@@ -61,4 +61,4 @@ const test = () => {
 		</div>
 	);
 }
-export default test 
+export default Test 
