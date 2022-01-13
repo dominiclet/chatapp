@@ -1,13 +1,22 @@
-import {BsThreeDotsVertical} from 'react-icons/bs'
+import {BsThreeDotsVertical} from 'react-icons/bs';
+import { io, Socket } from "socket.io-client";
+import { Message, SocketInstance } from "../types/socket";
+import { useState, useEffect } from 'react';
+import { disconnect } from 'process';
+import {useRouter} from 'next/router';
 
-const leaveChat = () => {
-    const parent: any = document.getElementById("messages")
-    while (parent.firstChild) {
-        parent.firstChild.remove()
-    }
+interface Props {
+    username:String
 }
 
-const SideBar = (props: any) => {
+const SideBar = (props: Props) => {
+
+    const router = useRouter();
+
+    const leaveChat = () => {
+        router.push('/new-chat')
+    }
+
     return (
         <div className="flex flex-col items-center h-full w-1/6">
             <div className="flex flex-row bg-light-blue h-min w-full mb-3 rounded-lg">
@@ -17,7 +26,7 @@ const SideBar = (props: any) => {
                 </button>
             </div>                
             <div className="flex justify-center items-end bg-light-blue h-full w-full rounded-lg">
-                <div className="">
+                <div>
                     <button 
                         className="mb-10 text-black bg-light-red 
                         hover:bg-red-400 focus:ring-4 focus:ring-transparent 

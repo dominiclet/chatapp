@@ -81,7 +81,7 @@ const Chat = (props: Props) => {
 	}
 
     return (
-        <div className="flex flex-col items-center w-5/6 h-screen">
+        <div className="flex flex-col items-center w-5/6 h-screen bg-background">
             <div className="flex flex-col self-center w-full h-full overflow-y-scroll" id="messages">
                 <div className="flex justify-center p-3">
                     <button disabled={true} className="rounded-lg bg-date-button text-white text-sm px-7 py-0.5">
@@ -107,7 +107,7 @@ const Chat = (props: Props) => {
                                 onChange={(e) => {
                                     setInput(e.target.value);
                                 }} 
-                                className="w-full rounded-lg outline-transparent"
+                                className="w-full rounded-lg outline-none bg-background"
                                 onKeyDown={(event) => {
                                     if (event.key === "Enter") sendMsg();
                                 }}
@@ -118,6 +118,7 @@ const Chat = (props: Props) => {
                                 type="submit"
                                 value="Send"
                                 className="w-20 p-1 font-medium text-center text-white rounded-lg hover:outline-blue bg-send-button focus:ring-4"
+                                onClick={sendMsg}
                             />                         
                         </div>        
                     </div>
